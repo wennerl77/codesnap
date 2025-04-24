@@ -12,11 +12,11 @@ import model.Financa;
 
 public class FinancaDAO {
 
-    private static final String schema = "wenner_lucas";
+    private static final String SCHEMA = "wenner_lucas";
 
     public static void createFinanca(Financa financa) throws SQLException {
         Connection c = FactoryConnectionDB.getInstace();
-        String SQL = "INSERT INTO " + schema + ".financas(nome, classificacao, valor, data_entrada, data_cadastro, tipo_transacao) VALUES (?,?,?,?,?,?);";
+        String SQL = "INSERT INTO " + SCHEMA + ".financas(nome, classificacao, valor, data_entrada, data_cadastro, tipo_transacao) VALUES (?,?,?,?,?,?);";
         PreparedStatement query = c.prepareStatement(SQL);
         query.setString(1, financa.getNome());
         query.setString(2, financa.getClassificacao());
@@ -32,7 +32,7 @@ public class FinancaDAO {
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
         int mes = date.toLocalDate().getMonthValue();
-        String SQL = "SELECT * FROM " + schema + ".financas WHERE EXTRACT(MONTH FROM data_entrada) = (?);";
+        String SQL = "SELECT * FROM " + SCHEMA + ".financas WHERE EXTRACT(MONTH FROM data_entrada) = (?);";
         PreparedStatement preparedStatement = c.prepareStatement(SQL);
         preparedStatement.setInt(1, mes);
         ResultSet rs = preparedStatement.executeQuery();
@@ -57,7 +57,7 @@ public class FinancaDAO {
     public static List<Financa> getFinancas(Date date1, Date date2) throws SQLException {
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
-        String SQL = "SELECT * FROM " + schema + ".financas WHERE data_entrada >= (?) AND data_entrada <= (?);";
+        String SQL = "SELECT * FROM " + SCHEMA + ".financas WHERE data_entrada >= (?) AND data_entrada <= (?);";
         PreparedStatement preparedStatement = c.prepareStatement(SQL);
         preparedStatement.setDate(1, date1);
         preparedStatement.setDate(2, date2);
@@ -78,5 +78,26 @@ public class FinancaDAO {
         }
         
         return list;
+    }
+    
+    public static void deleteFinanca(Financa financa) throws SQLException{
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "DELETE FROM " + SCHEMA + ".financas WHERE "
+                + "nome = ? AND "
+                + "classificacao = ? AND "
+                + "valor = ? AND "
+                + "data_entrada = ? AND "
+                + "data_cadastro = ? AND "
+                + "tipo_transacao = ?;";
+        
+        PreparedStatement query = c.prepareStatement(SQL);
+        query.setString(1, financa.getNome());
+        query.setString(2, financa.getClassificacao());
+        query.setFloat(3, financa.getValor());
+        query.setDate(4, financa.getDataFinanca());
+        query.setDate(5, financa.getDataCadastro());
+        query.setString(6, financa.getTipoTransacao());
+        query.executeUpdate();
+        c.close();
     }
 }

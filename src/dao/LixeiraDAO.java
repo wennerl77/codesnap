@@ -1,0 +1,75 @@
+package dao;
+
+import ConnectionDB.FactoryConnectionDB;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Financa;
+
+public class LixeiraDAO {
+    
+    private static final String SCHEMA = "wenner_lucas";
+    
+    public static void addLixeira(Financa financa) throws SQLException{
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "INSERT INTO " + SCHEMA + ".lixeira(nome, classificacao, valor, data_entrada, data_cadastro, tipo_transacao) VALUES (?,?,?,?,?,?);";
+        PreparedStatement query = c.prepareStatement(SQL);
+        query.setString(1, financa.getNome());
+        query.setString(2, financa.getClassificacao());
+        query.setFloat(3, financa.getValor());
+        query.setDate(4, financa.getDataFinanca());
+        query.setDate(5, financa.getDataCadastro());
+        query.setString(6, financa.getTipoTransacao());
+        query.executeUpdate();
+        c.close();
+    }
+    
+    public static void removeLixeira(Financa financa) throws SQLException{
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "DELETE FROM " + SCHEMA + ".lixeira WHERE "
+                + "nome = ? AND "
+                + "classificacao = ? AND "
+                + "valor = ? AND "
+                + "data_entrada = ? AND "
+                + "data_cadastro = ? AND "
+                + "tipo_transacao = ?;";
+        
+        PreparedStatement query = c.prepareStatement(SQL);
+        query.setString(1, financa.getNome());
+        query.setString(2, financa.getClassificacao());
+        query.setFloat(3, financa.getValor());
+        query.setDate(4, financa.getDataFinanca());
+        query.setDate(5, financa.getDataCadastro());
+        query.setString(6, financa.getTipoTransacao());
+        query.executeUpdate();
+        c.close();
+    }
+    
+    public static List<Financa> getAllItensLixeira() throws SQLException{
+        List<Financa> list = new ArrayList<>();
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "SELECT * FROM " + SCHEMA + ".lixeira;";
+        PreparedStatement preparedStatement = c.prepareStatement(SQL);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nome = rs.getString("nome");
+            String classificacao = rs.getString("classificacao");
+            float valor = rs.getFloat("valor");
+            Date dataEntrada = rs.getDate("data_entrada");
+            Date dataCadastro = rs.getDate("data_cadastro");
+            String tipoTransacao = rs.getString("tipo_transacao");
+            
+            Financa financa = new Financa(id, nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+            
+            list.add(financa);
+        }
+        
+        return list;
+    }
+}

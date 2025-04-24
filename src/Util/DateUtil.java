@@ -63,4 +63,23 @@ public class DateUtil {
         
         return dia + "/" + mes + "/" + ano;
     }
+    
+    public static String formattedDate(String date) {
+        date = date.replace('-', '/');
+        String[] d = date.split("/");
+        if (d.length != 3) return null;
+        if (d[0].length() < 2) {
+            d[0] = "0" + d[0];
+        }
+        if (d[1].length() < 2) {
+            d[1] = "0" + d[1];
+        }
+        if (d[2].length() < 4) {
+            d[2] = "%04s" .formatted(d[2]);
+        }
+        
+        String dataFormatted = "";
+        dataFormatted += d[0] + "/" + d[1] + "/" + d[2];
+        return dataFormatted;
+    }
 }

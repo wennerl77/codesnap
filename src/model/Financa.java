@@ -6,17 +6,26 @@ public class Financa {
     private int id;
     private String nome;
     private String classificacao;
-    private double valor;
-    private Date dataFinanca;
+    private float valor;
+    private Date dataEntrada;
     private Date dataCadastro;
     private String tipoTransacao;
 
-    public Financa(int id, String nome, String classificacao, double valor, Date dataFinanca, Date dataCadastro, String tipoTransacao) {
+    public Financa(String nome, String classificacao, float valor, Date dataEntrada, Date dataCadastro, String tipoTransacao) {
+        this.nome = nome;
+        this.classificacao = classificacao;
+        this.valor = valor;
+        this.dataEntrada = dataEntrada;
+        this.dataCadastro = dataCadastro;
+        this.tipoTransacao = tipoTransacao;
+    }
+
+    public Financa(int id, String nome, String classificacao, float valor, Date dataEntrada, Date dataCadastro, String tipoTransacao) {
         this.id = id;
         this.nome = nome;
         this.classificacao = classificacao;
         this.valor = valor;
-        this.dataFinanca = dataFinanca;
+        this.dataEntrada = dataEntrada;
         this.dataCadastro = dataCadastro;
         this.tipoTransacao = tipoTransacao;
     }
@@ -33,12 +42,12 @@ public class Financa {
         return classificacao;
     }
 
-    public double getValor() {
+    public float getValor() {
         return valor;
     }
 
     public Date getDataFinanca() {
-        return dataFinanca;
+        return dataEntrada;
     }
 
     public Date getDataCadastro() {
@@ -49,10 +58,6 @@ public class Financa {
         return tipoTransacao;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -61,12 +66,12 @@ public class Financa {
         this.classificacao = classificacao;
     }
 
-    public void setValor(double valor) {
+    public void setValor(float valor) {
         this.valor = valor;
     }
 
     public void setDataFinanca(Date dataFinanca) {
-        this.dataFinanca = dataFinanca;
+        this.dataEntrada = dataFinanca;
     }
 
     public void setDataCadastro(Date dataCadastro) {

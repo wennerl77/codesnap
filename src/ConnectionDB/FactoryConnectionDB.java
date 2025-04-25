@@ -19,6 +19,7 @@ public class FactoryConnectionDB {
     private static String database;
     private static String user;
     private static String password;
+    private static Connection connection;
     
     /**
      * 
@@ -44,7 +45,9 @@ public class FactoryConnectionDB {
      * @throws SQLException 
      */
     public static Connection getInstace() throws SQLException{
+        if (connection != null && !connection.isClosed()) return connection;
         String host = "jdbc:postgresql://" + ip + "/" + database;
-        return DriverManager.getConnection(host, user, password);
+        connection =  DriverManager.getConnection(host, user, password);
+        return connection;
     }
 }

@@ -1,6 +1,6 @@
 package view;
 
-import control.ControlerLixeira;
+import control.ControllerLixeira;
 import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -33,7 +33,7 @@ public class Main {
                     int showConfirmDialog = JOptionPane.showConfirmDialog(frame, "O aplicativo sera fechado, deseja esvaziar a lixeira?");
                     if (showConfirmDialog == JOptionPane.YES_OPTION) {
                         try {
-                            ControlerLixeira.deleteALlFinancaLixeira();
+                            ControllerLixeira.deleteAllFinancaLixeira();
                         } catch (SQLException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }

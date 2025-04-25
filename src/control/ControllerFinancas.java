@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ControleFinancas {
+public class ControllerFinancas {
 
     /**
      *
@@ -70,7 +70,7 @@ public class ControleFinancas {
      */
     public static void deleteFinanca(Financa financa) throws SQLException {
         FinancaDAO.deleteFinanca(financa);
-        ControlerLixeira.addFinancaLixeira(financa);
+        ControllerLixeira.addFinancaLixeira(financa);
     }
     
     /**

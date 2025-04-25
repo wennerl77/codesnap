@@ -2,14 +2,13 @@ package view;
 
 import Util.DateUtil;
 import Util.FilesUtil;
-import control.ControleFinancas;
-import control.ControlerLixeira;
+import control.ControllerFinancas;
+import control.ControllerLixeira;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -149,30 +148,6 @@ public class Interface extends javax.swing.JPanel {
         } else {
             jLabelDinheiroDiferenca.setForeground(Color.BLACK);
         }
-    }
-
-    // Pega uma lista de Financas a partir de uma data
-    private List<Financa> getFinancas(Date date) {
-        List<Financa> list;
-        try {
-            list = ControleFinancas.getFinancesByDate(date);
-        } catch (SQLException ex) {
-            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-            return new ArrayList<>();
-        }
-        return list;
-    }
-
-    // Pega uma lista de Financas a partir de duas datas
-    private List<Financa> getFinancas(Date date1, Date date2) {
-        List<Financa> list;
-        try {
-            list = ControleFinancas.getFinancasByDates(date1, date2);
-        } catch (SQLException ex) {
-            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-            return new ArrayList<>();
-        }
-        return list;
     }
 
     // Atualiza a tabela colocando os valores de uma lista de Financas
@@ -520,15 +495,15 @@ public class Interface extends javax.swing.JPanel {
         String tipoTransacao = getTextTipoTransacao();
 
         // Cria a Financa
-        Financa financa = ControleFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+        Financa financa = ControllerFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
 
         // Verifica se os dados estão corretos
-        if (ControleFinancas.verificarFinanca(financa)) {
+        if (ControllerFinancas.verificarFinanca(financa)) {
             try {
                 // Adiciona financa ao banco de dados e atualiza a tabela como a data da financa
-                ControleFinancas.addFinanca(financa);
+                ControllerFinancas.addFinanca(financa);
                 JOptionPane.showMessageDialog(this, "Financa criada", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                atualizarList(getFinancas(dataEntrada));
+                atualizarList(ControllerFinancas.getFinancesByDate(dataEntrada));
                 // Limpa os campos de entrada ao cadastrar uma financa
                 jTextFieldNome.setText("");
                 jTextFieldClassificacao.setText("");
@@ -546,8 +521,12 @@ public class Interface extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     private void jButtonMesAtualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMesAtualActionPerformed
-        // Atualiza a lista com as financas do mes atual
-        atualizarList(getFinancas(DateUtil.getDateSQL(System.currentTimeMillis())));
+        try {
+            // Atualiza a lista com as financas do mes atual
+            atualizarList(ControllerFinancas.getFinancesByDate(DateUtil.getDateSQL(System.currentTimeMillis())));
+        } catch (SQLException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonMesAtualActionPerformed
 
     private void jButtonLixeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLixeiraActionPerformed
@@ -564,7 +543,7 @@ public class Interface extends javax.swing.JPanel {
         Date dataCadastro = DateUtil.getDateSQL(jTable.getValueAt(row, 4).toString());
         String tipoTransacao = jTable.getValueAt(row, 5).toString();
 
-        Financa financa = ControleFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+        Financa financa = ControllerFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
         
         // Pergunta se realmente ira remover o item, se confirmar, o envia para a lixeira  
         try {
@@ -577,9 +556,9 @@ public class Interface extends javax.swing.JPanel {
                     + tipoTransacao;
             int showConfirmDialog = JOptionPane.showConfirmDialog(this, message, "WARNING", JOptionPane.WARNING_MESSAGE);
             if (showConfirmDialog == JOptionPane.OK_OPTION) {
-                ControleFinancas.deleteFinanca(financa);
+                ControllerFinancas.deleteFinanca(financa);
                 JOptionPane.showMessageDialog(this, "Movido para a lixeira com sucesso", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                atualizarList(getFinancas(dataEntrada));
+                atualizarList(ControllerFinancas.getFinancesByDate(dataEntrada));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
@@ -598,7 +577,11 @@ public class Interface extends javax.swing.JPanel {
             } else {
                 dateAte = "31/12/9999";
             }
-            atualizarList(getFinancas(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
+            try {
+                atualizarList(ControllerFinancas.getFinancasByDates(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
+            } catch (SQLException ex) {
+                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jFormattedTextFieldDeKeyReleased
 
@@ -613,7 +596,11 @@ public class Interface extends javax.swing.JPanel {
             } else {
                 dateDe = "00/00/0000";
             }
-            atualizarList(getFinancas(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
+            try {
+                atualizarList(ControllerFinancas.getFinancasByDates(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
+            } catch (SQLException ex) {
+                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jFormattedTextFieldAteKeyReleased
 
@@ -621,16 +608,16 @@ public class Interface extends javax.swing.JPanel {
         // Recupera a ultima data colocada na lixeira
         Financa financa;
         try {
-            financa = ControlerLixeira.getFirstItemLixeira();
+            financa = ControllerLixeira.getFirstItemLixeira();
 
             if (financa == null) {
                 JOptionPane.showMessageDialog(this, "Lixeira está vazia", "WARNING", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             // Adiciona o item recuperado na tabela e o remove da lixeira
-            ControleFinancas.addFinanca(financa);
-            ControlerLixeira.deleteFinancaLixeira(financa);
-            atualizarList(getFinancas(financa.getDataFinanca()));
+            ControllerFinancas.addFinanca(financa);
+            ControllerLixeira.deleteFinancaLixeira(financa);
+            atualizarList(ControllerFinancas.getFinancesByDate(financa.getDataFinanca()));
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -645,7 +632,7 @@ public class Interface extends javax.swing.JPanel {
             List<Financa> list;
             // Verifica se as duas datas sao validas
             if (DateUtil.isDateFormatted(data1) && DateUtil.isDateFormatted(data2)) {
-                list = ControleFinancas.getFinancasByDates(DateUtil.getDateSQL(data1), DateUtil.getDateSQL(data2));
+                list = ControllerFinancas.getFinancasByDates(DateUtil.getDateSQL(data1), DateUtil.getDateSQL(data2));
             } else {
                 JOptionPane.showMessageDialog(this, "Defina o intervalo da data acima.", "WARNING", JOptionPane.WARNING_MESSAGE);
                 return;

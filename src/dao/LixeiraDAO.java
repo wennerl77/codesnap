@@ -43,7 +43,7 @@ public class LixeiraDAO {
      * Deleta a financa passada como parametro
      * @throws SQLException 
      */
-    public static void removeLixeira(Financa financa) throws SQLException{
+    public static void deleteLixeira(Financa financa) throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "DELETE FROM " + SCHEMA + ".lixeira WHERE "
                 + "nome = ? AND "

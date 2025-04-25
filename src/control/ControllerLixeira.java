@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 import model.Financa;
 
-public class ControlerLixeira {
+public class ControllerLixeira {
     /** 
      * 
      * @param financa financa a ser adicionada
@@ -27,7 +27,7 @@ public class ControlerLixeira {
      * @throws SQLException 
      */
     public static void deleteFinancaLixeira(Financa financa) throws SQLException {
-        LixeiraDAO.removeLixeira(financa);
+        LixeiraDAO.deleteLixeira(financa);
     }
     
     /**
@@ -36,7 +36,7 @@ public class ControlerLixeira {
      * </p>
      * @throws SQLException 
      */
-    public static void deleteALlFinancaLixeira() throws SQLException {
+    public static void deleteAllFinancaLixeira() throws SQLException {
         LixeiraDAO.removeAllItensLixeira();
     }
     

@@ -231,6 +231,9 @@
                 <LineBorder/>
               </Border>
             </Property>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 20, 2, 6]"/>
+            </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -444,11 +447,11 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
-                  <JTableSelectionModel selectionMode="0"/>
+                  <JTableSelectionModel selectionMode="1"/>
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="    new javax.swing.JTable() {&#xd;        @Override&#xd;        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xd;            Component c = super.prepareRenderer(renderer, row, column);&#xd; &#xd;            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase(&quot;ganho&quot;)) c.setBackground(new Color(0.0f, 0.80f, 0.0f, 0.5f));&#xd;            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase(&quot;gasto&quot;)) c.setBackground(new Color(0.80f, 0.0f, 0.0f, 0.5f));&#xd;            return c;&#xd;        }&#xd;    };&#xd;"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="    new javax.swing.JTable() {&#xa;        @Override&#xa;        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xa;            Component c = super.prepareRenderer(renderer, row, column);&#xa; &#xa;            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase(&quot;ganho&quot;)) c.setBackground(new Color(0.0f, 0.80f, 0.0f, 0.5f));&#xa;            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase(&quot;gasto&quot;)) c.setBackground(new Color(0.80f, 0.0f, 0.0f, 0.5f));&#xa;            if (jTable.getSelectedRow() == row) c.setBackground(new Color(0.0f, 0.0f, 0.80f, 0.5f));&#xa;            return c;&#xa;        }&#xa;    };&#xa;"/>
                 <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Interface_jTable"/>
               </AuxValues>
             </Component>

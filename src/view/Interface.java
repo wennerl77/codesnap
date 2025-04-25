@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package view;
 
 import Util.DateUtil;
 import Util.FilesUtil;
 import control.ControleFinancas;
 import control.ControlerLixeira;
-import dao.LixeiraDAO;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
@@ -28,10 +23,10 @@ import model.Financa;
  */
 public class Interface extends javax.swing.JPanel {
 
-    private float ganho;
-    private float gasto;
-    private float diferenca;
-    private int row;
+    private float ganho; // Ganho feito pelo seu Jose
+    private float gasto; // Gasto feito pelo seu Jose
+    private float diferenca; // Diferenca entre o ganho e gasto
+    private int row; // Linha selecionada na tabela
 
     public Interface() {
         initComponents();
@@ -41,10 +36,12 @@ public class Interface extends javax.swing.JPanel {
         this.gasto = 0.0f;
         this.diferenca = 0.0f;
 
+        // Se contem itens, ativa tabelas e labels
         if (((DefaultTableModel) jTable.getModel()).getRowCount() != 0) {
             contemFinanca(true);
         }
 
+        // Cria um listener para sempre que selecionar uma linha, atribui os valores aos respectivos campos para poderem ser alterados
         jTable.getSelectionModel().addListSelectionListener((e) -> {
             row = jTable.getSelectedRow();
 
@@ -69,7 +66,7 @@ public class Interface extends javax.swing.JPanel {
 
     }
 
-    // Eh chamado caso não haja itens no banco de dados
+    // Altera entre os estados de ter itens na tabela, state true, e não ter, state false
     public final void contemFinanca(boolean state) {
         jTable.setVisible(state);
         jScrollPane2.setVisible(state);
@@ -249,16 +246,17 @@ public class Interface extends javax.swing.JPanel {
         jLabelDiferenca = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable =     new javax.swing.JTable() {
-        @Override
-        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-            Component c = super.prepareRenderer(renderer, row, column);
- 
-            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase("ganho")) c.setBackground(new Color(0.0f, 0.80f, 0.0f, 0.5f));
-            if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase("gasto")) c.setBackground(new Color(0.80f, 0.0f, 0.0f, 0.5f));
-            return c;
-        }
-    };
-;
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase("ganho")) c.setBackground(new Color(0.0f, 0.80f, 0.0f, 0.5f));
+                if (jTable.getValueAt(row, 5).toString().equalsIgnoreCase("gasto")) c.setBackground(new Color(0.80f, 0.0f, 0.0f, 0.5f));
+                if (jTable.getSelectedRow() == row) c.setBackground(new Color(0.0f, 0.0f, 0.80f, 0.5f));
+                return c;
+            }
+        };
+        ;
         jFormattedTextFieldDataEntrada = new javax.swing.JFormattedTextField();
         jFormattedTextFieldDe = new javax.swing.JFormattedTextField();
         jFormattedTextFieldAte = new javax.swing.JFormattedTextField();
@@ -332,6 +330,7 @@ public class Interface extends javax.swing.JPanel {
 
         jTextFieldValor.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldValor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jTextFieldValor.setMargin(new java.awt.Insets(2, 20, 2, 6));
         jPanel1.add(jTextFieldValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 280, 220, 38));
 
         jToggleButtonGanho.setBackground(new java.awt.Color(51, 204, 0));
@@ -404,7 +403,7 @@ public class Interface extends javax.swing.JPanel {
         ));
         jTable.setToolTipText("");
         jTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jScrollPane2.setViewportView(jTable);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 160, 550, 340));

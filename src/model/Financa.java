@@ -2,6 +2,10 @@ package model;
 
 import java.sql.Date;
 
+/**
+ * Modelo de Financa no Java do banco de dados
+ * @author WennerLucas
+ */
 public class Financa {
     private int id;
     private String nome;
@@ -30,6 +34,7 @@ public class Financa {
         this.tipoTransacao = tipoTransacao;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -81,7 +86,7 @@ public class Financa {
     public void setTipoTransacao(String tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
-
+    
     @Override
     public String toString() {
         return "Financa{" + "id=" + id + ", nome=" + nome + ", classificacao=" + classificacao + ", valor=" + valor + ", dataEntrada=" + dataEntrada + ", dataCadastro=" + dataCadastro + ", tipoTransacao=" + tipoTransacao + '}';

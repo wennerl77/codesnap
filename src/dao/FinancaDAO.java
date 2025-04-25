@@ -12,8 +12,17 @@ import model.Financa;
 
 public class FinancaDAO {
 
+    // SCHEMA do banco de dados
     private static final String SCHEMA = "wenner_lucas";
 
+    /**
+     * 
+     * @param financa financa a ser criada
+     * <p>
+     * Adiciona uma financa ao banco de dados na tabela Financa
+     * </p>
+     * @throws SQLException 
+     */
     public static void createFinanca(Financa financa) throws SQLException {
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "INSERT INTO " + SCHEMA + ".financas(nome, classificacao, valor, data_entrada, data_cadastro, tipo_transacao) VALUES (?,?,?,?,?,?);";
@@ -28,13 +37,24 @@ public class FinancaDAO {
         c.close();
     }
 
+    /**
+     * 
+     * @param date data
+     * <p>
+     * Cria uma lista de financas a partir do mes da data
+     * </p>
+     * @return Uma lista de financas
+     * @throws SQLException 
+     */
     public static List<Financa> getFinancas(Date date) throws SQLException {
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
         int mes = date.toLocalDate().getMonthValue();
-        String SQL = "SELECT * FROM " + SCHEMA + ".financas WHERE EXTRACT(MONTH FROM data_entrada) = (?);";
+        int ano = date.toLocalDate().getYear();
+        String SQL = "SELECT * FROM " + SCHEMA + ".financas WHERE EXTRACT(MONTH FROM data_entrada) = (?) AND EXTRACT(YEAR FROM data_entrada) = (?);";
         PreparedStatement preparedStatement = c.prepareStatement(SQL);
         preparedStatement.setInt(1, mes);
+        preparedStatement.setInt(2, ano);
         ResultSet rs = preparedStatement.executeQuery();
 
         while (rs.next()) {
@@ -54,6 +74,16 @@ public class FinancaDAO {
         return list;
     }
     
+    /**
+     * 
+     * @param date1 primeira data
+     * @param date2 segunda data
+     * <p>
+     * Cria uma lista de financas com todas as financas no intervalo entre data1 e data2
+     * </p>
+     * @return Uma lista de financas
+     * @throws SQLException 
+     */
     public static List<Financa> getFinancas(Date date1, Date date2) throws SQLException {
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
@@ -80,6 +110,14 @@ public class FinancaDAO {
         return list;
     }
     
+    /**
+     * 
+     * <p>
+     * Cria uma lista de financas com todas as financas da tabela
+     * </p>
+     * @return Uma lista de financas
+     * @throws SQLException 
+     */
     public static List<Financa> getAllFinancas() throws SQLException {
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
@@ -104,8 +142,12 @@ public class FinancaDAO {
         return list;
     }
     
-    
-    
+    /**
+     * 
+     * @param financa financa a ser deletada
+     * Deleta a financa passada como parametro
+     * @throws SQLException 
+     */
     public static void deleteFinanca(Financa financa) throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "DELETE FROM " + SCHEMA + ".financas WHERE "

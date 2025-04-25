@@ -12,9 +12,18 @@ import model.Financa;
 
 public class LixeiraDAO {
     
+    // SCHEMA do banco de dados
     private static final String SCHEMA = "wenner_lucas";
     
-    public static void addLixeira(Financa financa) throws SQLException{
+    /**
+     * 
+     * @param financa financa a ser criada
+     * <p>
+     * Adiciona uma financa ao banco de dados na tabela Lixeira
+     * </p>
+     * @throws SQLException 
+     */
+    public static void createLixeira(Financa financa) throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "INSERT INTO " + SCHEMA + ".lixeira(nome, classificacao, valor, data_entrada, data_cadastro, tipo_transacao) VALUES (?,?,?,?,?,?);";
         PreparedStatement query = c.prepareStatement(SQL);
@@ -28,6 +37,12 @@ public class LixeiraDAO {
         c.close();
     }
     
+    /**
+     * 
+     * @param financa financa a ser deletada
+     * Deleta a financa passada como parametro
+     * @throws SQLException 
+     */
     public static void removeLixeira(Financa financa) throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "DELETE FROM " + SCHEMA + ".lixeira WHERE "
@@ -49,6 +64,14 @@ public class LixeiraDAO {
         c.close();
     }
     
+    /**
+     * 
+     * <p>
+     * Cria uma lista de financas com todas as financas da tabela lixeira
+     * </p>
+     * @return Uma lista de financas
+     * @throws SQLException 
+     */
     public static List<Financa> getAllItensLixeira() throws SQLException{
         List<Financa> list = new ArrayList<>();
         Connection c = FactoryConnectionDB.getInstace();
@@ -72,10 +95,17 @@ public class LixeiraDAO {
         
         return list;
     }
-    
+    /**
+     * 
+     * <p>
+     * Busca a ultima financa apagada
+     * </p>
+     * @return Uma financa
+     * @throws SQLException 
+     */
     public static Financa getFirstItemLixeira() throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
-        String SQL = "SELECT * FROM " + SCHEMA + ".lixeira ORDER BY id LIMIT 1;";
+        String SQL = "SELECT * FROM " + SCHEMA + ".lixeira ORDER BY id DESC LIMIT 1;";
         PreparedStatement preparedStatement = c.prepareStatement(SQL);
         ResultSet rs = preparedStatement.executeQuery();
 

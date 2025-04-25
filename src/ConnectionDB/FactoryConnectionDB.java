@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class FactoryConnectionDB {
+    /*
+        Configurações iniciais utilizando o banco da escola
+    */
     static {
         ip = "200.18.128.56";
         user = "aula";
@@ -17,8 +20,17 @@ public class FactoryConnectionDB {
     private static String user;
     private static String password;
     
+    /**
+     * 
+     * @param ip
+     * @param database
+     * @param user
+     * @param password 
+     * 
+     * Seta as configurações ip, database, user e password
+     */
     public static void setConfig(String ip, String database, String user, String password) {
-        FactoryConnectionDB.ip = ip.concat(user);
+        FactoryConnectionDB.ip = ip;
         FactoryConnectionDB.database = database;
         FactoryConnectionDB.user = user;
         FactoryConnectionDB.password = password;

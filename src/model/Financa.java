@@ -81,4 +81,9 @@ public class Financa {
     public void setTipoTransacao(String tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
+
+    @Override
+    public String toString() {
+        return "Financa{" + "id=" + id + ", nome=" + nome + ", classificacao=" + classificacao + ", valor=" + valor + ", dataEntrada=" + dataEntrada + ", dataCadastro=" + dataCadastro + ", tipoTransacao=" + tipoTransacao + '}';
+    }
 }

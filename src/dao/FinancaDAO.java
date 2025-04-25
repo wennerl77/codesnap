@@ -80,6 +80,32 @@ public class FinancaDAO {
         return list;
     }
     
+    public static List<Financa> getAllFinancas() throws SQLException {
+        List<Financa> list = new ArrayList<>();
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "SELECT * FROM " + SCHEMA + ".financas;";
+        PreparedStatement preparedStatement = c.prepareStatement(SQL);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nome = rs.getString("nome");
+            String classificacao = rs.getString("classificacao");
+            float valor = rs.getFloat("valor");
+            Date dataEntrada = rs.getDate("data_entrada");
+            Date dataCadastro = rs.getDate("data_cadastro");
+            String tipoTransacao = rs.getString("tipo_transacao");
+            
+            Financa financa = new Financa(id, nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+            
+            list.add(financa);
+        }
+        
+        return list;
+    }
+    
+    
+    
     public static void deleteFinanca(Financa financa) throws SQLException{
         Connection c = FactoryConnectionDB.getInstace();
         String SQL = "DELETE FROM " + SCHEMA + ".financas WHERE "

@@ -75,7 +75,7 @@ public class DateUtil {
             d[1] = "0" + d[1];
         }
         if (d[2].length() < 4) {
-            d[2] = "%04s" .formatted(d[2]);
+            d[2] = "%4s".formatted(d[2]).replace(' ', '0');
         }
         
         String dataFormatted = "";

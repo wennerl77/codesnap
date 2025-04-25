@@ -5,9 +5,13 @@
 package view;
 
 import Util.DateUtil;
+import Util.FilesUtil;
 import control.ControleFinancas;
+import control.ControlerLixeira;
+import dao.LixeiraDAO;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,18 +28,18 @@ import model.Financa;
  */
 public class Interface extends javax.swing.JPanel {
 
-    private double ganho;
-    private double gasto;
-    private double diferenca;
+    private float ganho;
+    private float gasto;
+    private float diferenca;
     private int row;
 
     public Interface() {
         initComponents();
         contemFinanca(false);
 
-        this.ganho = 0.0;
-        this.gasto = 0.0;
-        this.diferenca = 0.0;
+        this.ganho = 0.0f;
+        this.gasto = 0.0f;
+        this.diferenca = 0.0f;
 
         if (((DefaultTableModel) jTable.getModel()).getRowCount() != 0) {
             contemFinanca(true);
@@ -62,8 +66,7 @@ public class Interface extends javax.swing.JPanel {
                 }
             }
         });
-        
-        
+
     }
 
     // Eh chamado caso não haja itens no banco de dados
@@ -142,7 +145,7 @@ public class Interface extends javax.swing.JPanel {
             jLabelDinheiroDiferenca.setForeground(Color.BLACK);
         }
     }
-    
+
     private void atualizarList(Date date) {
         List<Financa> list;
         try {
@@ -155,9 +158,9 @@ public class Interface extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
         dtm.setRowCount(0);
 
-        ganho = 0.0;
-        gasto = 0.0;
-        diferenca = 0.0;
+        ganho = 0.0f;
+        gasto = 0.0f;
+        diferenca = 0.0f;
 
         for (Financa f : list) {
             dtm.addRow(new Object[]{f.getNome(),
@@ -178,11 +181,11 @@ public class Interface extends javax.swing.JPanel {
 
         contemFinanca(!list.isEmpty());
     }
-    
+
     private void atualizarList(Date date1, Date date2) {
         List<Financa> list;
         try {
-            list = ControleFinancas.getFinancesByDates(date1, date2);
+            list = ControleFinancas.getFinancasByDates(date1, date2);
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
             return;
@@ -191,9 +194,9 @@ public class Interface extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
         dtm.setRowCount(0);
 
-        ganho = 0.0;
-        gasto = 0.0;
-        diferenca = 0.0;
+        ganho = 0.0f;
+        gasto = 0.0f;
+        diferenca = 0.0f;
 
         for (Financa f : list) {
             dtm.addRow(new Object[]{f.getNome(),
@@ -240,7 +243,7 @@ public class Interface extends javax.swing.JPanel {
         jToggleButtonGanho = new javax.swing.JToggleButton();
         jToggleButtonGasto = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
-        jButtonX = new javax.swing.JButton();
+        jButtonLixeira = new javax.swing.JButton();
         jLabelRecebido = new javax.swing.JLabel();
         jLabelGastos = new javax.swing.JLabel();
         jLabelDiferenca = new javax.swing.JLabel();
@@ -263,7 +266,8 @@ public class Interface extends javax.swing.JPanel {
         jLabelDinheiroGastos = new javax.swing.JLabel();
         jLabelDinheiroDiferenca = new javax.swing.JLabel();
         jLabelSemFinancas = new javax.swing.JLabel();
-        jButtonLixeira = new javax.swing.JButton();
+        jButtonRecuperar = new javax.swing.JButton();
+        jButtonX1 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -361,18 +365,18 @@ public class Interface extends javax.swing.JPanel {
         });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 239, 53));
 
-        jButtonX.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonX.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButtonX.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonX.setText("X");
-        jButtonX.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
-        jButtonX.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButtonX.addActionListener(new java.awt.event.ActionListener() {
+        jButtonLixeira.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonLixeira.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButtonLixeira.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonLixeira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/trash.png"))); // NOI18N
+        jButtonLixeira.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
+        jButtonLixeira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonLixeira.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonXActionPerformed(evt);
+                jButtonLixeiraActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonX, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 260, 50, 50));
+        jPanel1.add(jButtonLixeira, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 240, 60, 60));
 
         jLabelRecebido.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabelRecebido.setForeground(new java.awt.Color(0, 0, 0));
@@ -467,18 +471,31 @@ public class Interface extends javax.swing.JPanel {
         jLabelSemFinancas.setText("Não possui nenhuma finança cadastrada.");
         jPanel1.add(jLabelSemFinancas, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 290, -1, -1));
 
-        jButtonLixeira.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonLixeira.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButtonLixeira.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonLixeira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/trash.png"))); // NOI18N
-        jButtonLixeira.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
-        jButtonLixeira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButtonLixeira.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRecuperar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonRecuperar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButtonRecuperar.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonRecuperar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/volta.png"))); // NOI18N
+        jButtonRecuperar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
+        jButtonRecuperar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonRecuperar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonLixeiraActionPerformed(evt);
+                jButtonRecuperarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonLixeira, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 320, 50, 50));
+        jPanel1.add(jButtonRecuperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 310, 60, 60));
+
+        jButtonX1.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonX1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButtonX1.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonX1.setText("Gerar extrato");
+        jButtonX1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
+        jButtonX1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonX1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonX1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonX1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 510, 210, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -523,7 +540,7 @@ public class Interface extends javax.swing.JPanel {
         atualizarList(DateUtil.getDateSQL(System.currentTimeMillis()));
     }//GEN-LAST:event_jButtonMesAtualActionPerformed
 
-    private void jButtonXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonXActionPerformed
+    private void jButtonLixeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLixeiraActionPerformed
         if (row == -1) {
             return;
         }
@@ -537,7 +554,7 @@ public class Interface extends javax.swing.JPanel {
 
         Financa financa = ControleFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
         try {
-            String message = "Tem certeza que deseja excluir: \n"
+            String message = "Tem certeza que deseja mover para a lixeira: \n"
                     + nome + ", "
                     + classificacao + ", "
                     + valor + ", "
@@ -547,14 +564,14 @@ public class Interface extends javax.swing.JPanel {
             int showConfirmDialog = JOptionPane.showConfirmDialog(this, message, "WARNING", JOptionPane.WARNING_MESSAGE);
             if (showConfirmDialog == JOptionPane.OK_OPTION) {
                 ControleFinancas.deleteFinanca(financa);
-                JOptionPane.showMessageDialog(this, "Apagado com sucesso", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Movido para a lixeira com sucesso", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 atualizarList(dataEntrada);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jButtonXActionPerformed
+    }//GEN-LAST:event_jButtonLixeiraActionPerformed
 
     private void jFormattedTextFieldDeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFormattedTextFieldDeKeyReleased
         String dateDe = jFormattedTextFieldDe.getText();
@@ -582,9 +599,40 @@ public class Interface extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jFormattedTextFieldAteKeyReleased
 
-    private void jButtonLixeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLixeiraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonLixeiraActionPerformed
+    private void jButtonRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecuperarActionPerformed
+        Financa financa = null;
+        try {
+            financa = ControlerLixeira.getFirstItemLixeira();
+
+            if (financa == null) {
+                JOptionPane.showMessageDialog(this, "Lixeira está vazia", "WARNING", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            ControleFinancas.addFinanca(financa);
+            ControlerLixeira.deleteFinancaLixeira(financa);
+            atualizarList(financa.getDataFinanca());
+        } catch (SQLException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRecuperarActionPerformed
+
+    private void jButtonX1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonX1ActionPerformed
+        try {
+            String data1 = jFormattedTextFieldDe.getText();
+            String data2 = jFormattedTextFieldAte.getText();
+            List<Financa> list = null;
+            if (DateUtil.isDateFormatted(data1) && DateUtil.isDateFormatted(data2)) {
+                list = ControleFinancas.getFinancasByDates(DateUtil.getDateSQL(data1), DateUtil.getDateSQL(data2));
+            } else {
+                JOptionPane.showMessageDialog(this, "Defina o intervalo da data acima.", "WARNING", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            FilesUtil.gerarExtrato(list, jLabelDinheiroRecebido.getText(), jLabelDinheiroGastos.getText(), jLabelDinheiroDiferenca.getText());
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonX1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -592,7 +640,8 @@ public class Interface extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonLixeira;
     private javax.swing.JButton jButtonMesAtual;
-    private javax.swing.JButton jButtonX;
+    private javax.swing.JButton jButtonRecuperar;
+    private javax.swing.JButton jButtonX1;
     private javax.swing.JFormattedTextField jFormattedTextFieldAte;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataEntrada;
     private javax.swing.JFormattedTextField jFormattedTextFieldDe;

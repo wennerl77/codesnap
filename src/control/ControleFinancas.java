@@ -39,13 +39,18 @@ public class ControleFinancas {
     
     public static void deleteFinanca(Financa financa) throws SQLException {
         FinancaDAO.deleteFinanca(financa);
+        ControlerLixeira.addFinancaLixeira(financa);
     }
     
     public static List<Financa> getFinancesByDate(Date date) throws SQLException{
         return FinancaDAO.getFinancas(date);
     }
     
-    public static List<Financa> getFinancesByDates(Date date1, Date date2) throws SQLException{
+    public static List<Financa> getFinancasByDates(Date date1, Date date2) throws SQLException{
         return FinancaDAO.getFinancas(date1, date2);
+    }
+    
+    public static List<Financa> getAllFinancas() throws SQLException {
+        return FinancaDAO.getAllFinancas();
     }
 }

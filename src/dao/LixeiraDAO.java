@@ -72,4 +72,27 @@ public class LixeiraDAO {
         
         return list;
     }
+    
+    public static Financa getFirstItemLixeira() throws SQLException{
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "SELECT * FROM " + SCHEMA + ".lixeira ORDER BY id LIMIT 1;";
+        PreparedStatement preparedStatement = c.prepareStatement(SQL);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        if (rs.next()) {
+            int id = rs.getInt("id");
+            String nome = rs.getString("nome");
+            String classificacao = rs.getString("classificacao");
+            float valor = rs.getFloat("valor");
+            Date dataEntrada = rs.getDate("data_entrada");
+            Date dataCadastro = rs.getDate("data_cadastro");
+            String tipoTransacao = rs.getString("tipo_transacao");
+            
+            Financa financa = new Financa(id, nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+            
+            return financa;
+        }
+        
+        return null;
+    }
 }

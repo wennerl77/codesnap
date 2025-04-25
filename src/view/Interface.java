@@ -529,6 +529,13 @@ public class Interface extends javax.swing.JPanel {
                 ControleFinancas.addFinanca(financa);
                 JOptionPane.showMessageDialog(this, "Financa criada", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 atualizarList(getFinancas(dataEntrada));
+                // Limpa os campos de entrada ao cadastrar uma financa
+                jTextFieldNome.setText("");
+                jTextFieldClassificacao.setText("");
+                jTextFieldValor.setText("");
+                jFormattedTextFieldDataEntrada.setValue("");
+                jToggleButtonGanho.setSelected(false);
+                jToggleButtonGasto.setSelected(false);
             } catch (SQLException ex) {
                 Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
             }

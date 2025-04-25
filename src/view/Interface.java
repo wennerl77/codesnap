@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,6 +80,8 @@ public class Interface extends javax.swing.JPanel {
         jLabelSemFinancas.setVisible(!state);
     }
 
+    // Os getters pegam os valores de cada campo que o usuário preenche
+    // <editor-fold desc="Getters">
     public String getTextNome() {
         return jTextFieldNome.getText();
     }
@@ -112,7 +115,10 @@ public class Interface extends javax.swing.JPanel {
         }
         return "não informado";
     }
+    
+    // </editor-fold>
 
+    // Adiciona Ganho quando o usuário adiciona uma financa como ganho
     public void addGanho(double value) {
         if (value < 0) {
             return;
@@ -123,6 +129,7 @@ public class Interface extends javax.swing.JPanel {
         jLabelDinheiroDiferenca.setText(String.valueOf(diferenca));
     }
 
+    // Adiciona Gasto quando o usuário adiciona uma financa como gasto
     public void addGasto(double value) {
         if (value < 0) {
             return;
@@ -133,6 +140,7 @@ public class Interface extends javax.swing.JPanel {
         jLabelDinheiroDiferenca.setText(String.valueOf(diferenca));
     }
 
+    // Caso a diferenca entre o gasto e ganho fique positiva, a cor eh verde, se negativa, vermelha, caso nula, preta
     private void setDiferencaColor() {
         if (diferenca > 0) {
             jLabelDinheiroDiferenca.setForeground(Color.GREEN);
@@ -143,75 +151,64 @@ public class Interface extends javax.swing.JPanel {
         }
     }
 
-    private void atualizarList(Date date) {
+    // Pega uma lista de Financas a partir de uma data
+    private List<Financa> getFinancas(Date date) {
         List<Financa> list;
         try {
             list = ControleFinancas.getFinancesByDate(date);
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+            return new ArrayList<>();
         }
-
-        DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
-        dtm.setRowCount(0);
-
-        ganho = 0.0f;
-        gasto = 0.0f;
-        diferenca = 0.0f;
-
-        for (Financa f : list) {
-            dtm.addRow(new Object[]{f.getNome(),
-                f.getClassificacao(),
-                "%.2f".formatted(f.getValor()),
-                DateUtil.getDate(f.getDataFinanca()), DateUtil.getDate(f.getDataCadastro()),
-                f.getTipoTransacao()});
-
-            if (f.getTipoTransacao().equalsIgnoreCase("ganho")) {
-                addGanho(f.getValor());
-            }
-            if (f.getTipoTransacao().equalsIgnoreCase("gasto")) {
-                addGasto(f.getValor());
-            }
-        }
-
-        setDiferencaColor();
-
-        contemFinanca(!list.isEmpty());
+        return list;
     }
 
-    private void atualizarList(Date date1, Date date2) {
+    // Pega uma lista de Financas a partir de duas datas
+    private List<Financa> getFinancas(Date date1, Date date2) {
         List<Financa> list;
         try {
             list = ControleFinancas.getFinancasByDates(date1, date2);
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+            return new ArrayList<>();
         }
+        return list;
+    }
 
+    // Atualiza a tabela colocando os valores de uma lista de Financas
+    private void atualizarList(List<Financa> list) {
+        // Esvazia a tabela para os novos dados
         DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
         dtm.setRowCount(0);
 
+        // Como a tabela se atualiza, os ganhos, gastos e diferenca tem que ser referente aos novos dados
         ganho = 0.0f;
         gasto = 0.0f;
         diferenca = 0.0f;
 
+        // Percorre todas as financas de list
         for (Financa f : list) {
+            // Adiciona uma linha, preenchendo cada coluna com seu respectivo valor
             dtm.addRow(new Object[]{f.getNome(),
                 f.getClassificacao(),
                 "%.2f".formatted(f.getValor()),
                 DateUtil.getDate(f.getDataFinanca()), DateUtil.getDate(f.getDataCadastro()),
                 f.getTipoTransacao()});
 
+            // Se for um ganho, adiciona ganho
             if (f.getTipoTransacao().equalsIgnoreCase("ganho")) {
                 addGanho(f.getValor());
             }
+            // Se for gasto, adiciona gasto
             if (f.getTipoTransacao().equalsIgnoreCase("gasto")) {
                 addGasto(f.getValor());
             }
         }
 
+        // Depois de adicionar todos os itens, seta a cor do texto da diferenca
         setDiferencaColor();
 
+        // Se a lista esta vazia, esconde ela e os dados de ganho e gasto
         contemFinanca(!list.isEmpty());
     }
 
@@ -239,7 +236,7 @@ public class Interface extends javax.swing.JPanel {
         jTextFieldValor = new javax.swing.JTextField();
         jToggleButtonGanho = new javax.swing.JToggleButton();
         jToggleButtonGasto = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonCadastrar = new javax.swing.JButton();
         jButtonLixeira = new javax.swing.JButton();
         jLabelRecebido = new javax.swing.JLabel();
         jLabelGastos = new javax.swing.JLabel();
@@ -265,7 +262,7 @@ public class Interface extends javax.swing.JPanel {
         jLabelDinheiroDiferenca = new javax.swing.JLabel();
         jLabelSemFinancas = new javax.swing.JLabel();
         jButtonRecuperar = new javax.swing.JButton();
-        jButtonX1 = new javax.swing.JButton();
+        jButtonGerarExtrato = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -351,18 +348,18 @@ public class Interface extends javax.swing.JPanel {
         jToggleButtonGasto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel1.add(jToggleButtonGasto, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, 116, 50));
 
-        jButton1.setBackground(new java.awt.Color(0, 153, 153));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Cadastrar");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 153)));
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCadastrar.setBackground(new java.awt.Color(0, 153, 153));
+        jButtonCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButtonCadastrar.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonCadastrar.setText("Cadastrar");
+        jButtonCadastrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 153)));
+        jButtonCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonCadastrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 239, 53));
+        jPanel1.add(jButtonCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 239, 53));
 
         jButtonLixeira.setBackground(new java.awt.Color(255, 255, 255));
         jButtonLixeira.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -483,18 +480,18 @@ public class Interface extends javax.swing.JPanel {
         });
         jPanel1.add(jButtonRecuperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 310, 60, 60));
 
-        jButtonX1.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonX1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButtonX1.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonX1.setText("Gerar extrato");
-        jButtonX1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
-        jButtonX1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButtonX1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGerarExtrato.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonGerarExtrato.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButtonGerarExtrato.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonGerarExtrato.setText("Gerar extrato");
+        jButtonGerarExtrato.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204), 2));
+        jButtonGerarExtrato.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonGerarExtrato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonX1ActionPerformed(evt);
+                jButtonGerarExtratoActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonX1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 510, 210, 60));
+        jPanel1.add(jButtonGerarExtrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 510, 210, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -512,38 +509,47 @@ public class Interface extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextFieldDataEntradaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    // Cadastra uma nova financa
+    private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
+        // Pega todos os dados para preencher o construtor de Financa
         String nome = getTextNome();
         String classificacao = getTextClassificacao();
-        float valor = Float.parseFloat(getTextValor().replace(',', '.'));
+        float valor = getTextValor().isEmpty() || getTextValor().isBlank() ? 0.0f : Float.parseFloat(getTextValor().replace(',', '.'));
         Date dataEntrada = DateUtil.getDateSQL(getTextDataEntrada());
         Date dataCadastro = DateUtil.getDateSQL(System.currentTimeMillis());
         String tipoTransacao = getTextTipoTransacao();
 
+        // Cria a Financa
         Financa financa = ControleFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
 
+        // Verifica se os dados estão corretos
         if (ControleFinancas.verificarFinanca(financa)) {
             try {
+                // Adiciona financa ao banco de dados e atualiza a tabela como a data da financa
                 ControleFinancas.addFinanca(financa);
                 JOptionPane.showMessageDialog(this, "Financa criada", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                atualizarList(dataEntrada);
+                atualizarList(getFinancas(dataEntrada));
             } catch (SQLException ex) {
                 Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
+            // Caso a financa nao esteja valida
             JOptionPane.showMessageDialog(this, "Não foi possível adicionar uma financa", "AVISO", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     private void jButtonMesAtualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMesAtualActionPerformed
-        atualizarList(DateUtil.getDateSQL(System.currentTimeMillis()));
+        // Atualiza a lista com as financas do mes atual
+        atualizarList(getFinancas(DateUtil.getDateSQL(System.currentTimeMillis())));
     }//GEN-LAST:event_jButtonMesAtualActionPerformed
 
     private void jButtonLixeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLixeiraActionPerformed
+        // Nao tem nenhuma linha selecionada
         if (row == -1) {
             return;
         }
 
+        // Pega os dados da financa
         String nome = jTable.getValueAt(row, 0).toString();
         String classificacao = jTable.getValueAt(row, 1).toString();
         float valor = Float.parseFloat(jTable.getValueAt(row, 2).toString().replace(',', '.'));
@@ -552,6 +558,8 @@ public class Interface extends javax.swing.JPanel {
         String tipoTransacao = jTable.getValueAt(row, 5).toString();
 
         Financa financa = ControleFinancas.criarFinanca(nome, classificacao, valor, dataEntrada, dataCadastro, tipoTransacao);
+        
+        // Pergunta se realmente ira remover o item, se confirmar, o envia para a lixeira  
         try {
             String message = "Tem certeza que deseja mover para a lixeira: \n"
                     + nome + ", "
@@ -564,7 +572,7 @@ public class Interface extends javax.swing.JPanel {
             if (showConfirmDialog == JOptionPane.OK_OPTION) {
                 ControleFinancas.deleteFinanca(financa);
                 JOptionPane.showMessageDialog(this, "Movido para a lixeira com sucesso", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                atualizarList(dataEntrada);
+                atualizarList(getFinancas(dataEntrada));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
@@ -573,33 +581,38 @@ public class Interface extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonLixeiraActionPerformed
 
     private void jFormattedTextFieldDeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFormattedTextFieldDeKeyReleased
+        // Sempre que o campo de data DE eh atualizado, ele verifica se eh uma data valida, se sim, faz uma busca e atualiza a tabela
         String dateDe = jFormattedTextFieldDe.getText();
         if (DateUtil.isDateFormatted(dateDe)) {
             String dateAte;
+            // verifica se o campo de data ATE esta preenchido, se sim, faz uma busca, DE - ATE, se nao, ATE sera a data Maxima
             if (DateUtil.isDateFormatted(jFormattedTextFieldAte.getText())) {
                 dateAte = jFormattedTextFieldAte.getText();
             } else {
                 dateAte = "31/12/9999";
             }
-            atualizarList(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte));
+            atualizarList(getFinancas(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
         }
     }//GEN-LAST:event_jFormattedTextFieldDeKeyReleased
 
     private void jFormattedTextFieldAteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFormattedTextFieldAteKeyReleased
+        // Sempre que o campo de data DE eh atualizado, ele verifica se eh uma data valida, se sim, faz uma busca e atualiza a tabela
         String dateAte = jFormattedTextFieldAte.getText();
         if (DateUtil.isDateFormatted(dateAte)) {
             String dateDe;
+            // verifica se o campo de data DE esta preenchido, se sim, faz uma busca, DE - ATE, se nao, DE sera a data Minima
             if (DateUtil.isDateFormatted(jFormattedTextFieldDe.getText())) {
                 dateDe = jFormattedTextFieldDe.getText();
             } else {
                 dateDe = "00/00/0000";
             }
-            atualizarList(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte));
+            atualizarList(getFinancas(DateUtil.getDateSQL(dateDe), DateUtil.getDateSQL(dateAte)));
         }
     }//GEN-LAST:event_jFormattedTextFieldAteKeyReleased
 
     private void jButtonRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecuperarActionPerformed
-        Financa financa = null;
+        // Recupera a ultima data colocada na lixeira
+        Financa financa;
         try {
             financa = ControlerLixeira.getFirstItemLixeira();
 
@@ -607,40 +620,45 @@ public class Interface extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Lixeira está vazia", "WARNING", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+            // Adiciona o item recuperado na tabela e o remove da lixeira
             ControleFinancas.addFinanca(financa);
             ControlerLixeira.deleteFinancaLixeira(financa);
-            atualizarList(financa.getDataFinanca());
+            atualizarList(getFinancas(financa.getDataFinanca()));
         } catch (SQLException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonRecuperarActionPerformed
 
-    private void jButtonX1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonX1ActionPerformed
+    private void jButtonGerarExtratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarExtratoActionPerformed
+        // Gera o extrato com os itens da tabela
         try {
+            // Pega a data DE e a data ATE
             String data1 = jFormattedTextFieldDe.getText();
             String data2 = jFormattedTextFieldAte.getText();
-            List<Financa> list = null;
+            List<Financa> list;
+            // Verifica se as duas datas sao validas
             if (DateUtil.isDateFormatted(data1) && DateUtil.isDateFormatted(data2)) {
                 list = ControleFinancas.getFinancasByDates(DateUtil.getDateSQL(data1), DateUtil.getDateSQL(data2));
             } else {
                 JOptionPane.showMessageDialog(this, "Defina o intervalo da data acima.", "WARNING", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
+
+            // Gera o extrato e abre ele no notepad
             FilesUtil.gerarExtrato(list, jLabelDinheiroRecebido.getText(), jLabelDinheiroGastos.getText(), jLabelDinheiroDiferenca.getText());
         } catch (SQLException | IOException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonX1ActionPerformed
+    }//GEN-LAST:event_jButtonGerarExtratoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup GanhoGasto;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonCadastrar;
+    private javax.swing.JButton jButtonGerarExtrato;
     private javax.swing.JButton jButtonLixeira;
     private javax.swing.JButton jButtonMesAtual;
     private javax.swing.JButton jButtonRecuperar;
-    private javax.swing.JButton jButtonX1;
     private javax.swing.JFormattedTextField jFormattedTextFieldAte;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataEntrada;
     private javax.swing.JFormattedTextField jFormattedTextFieldDe;

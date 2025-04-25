@@ -32,6 +32,16 @@ public class ControlerLixeira {
     
     /**
      * <p>
+     * Deleta todas as financas da lixeira
+     * </p>
+     * @throws SQLException 
+     */
+    public static void deleteALlFinancaLixeira() throws SQLException {
+        LixeiraDAO.removeAllItensLixeira();
+    }
+    
+    /**
+     * <p>
      * Busca todas as financas da lixeira
      * </p>
      * @return um {@linkplain java.util.List} de {@linkplain model.Financa} com todas as financas da lixeira

@@ -67,6 +67,21 @@ public class LixeiraDAO {
     /**
      * 
      * <p>
+     * Remove todos os itens da lixeira
+     * </p>
+     * @throws SQLException 
+     */
+    public static void removeAllItensLixeira() throws SQLException{
+        Connection c = FactoryConnectionDB.getInstace();
+        String SQL = "DELETE FROM " + SCHEMA + ".lixeira;";
+        PreparedStatement query = c.prepareStatement(SQL);
+        query.executeUpdate();
+        c.close();
+    }
+    
+    /**
+     * 
+     * <p>
      * Cria uma lista de financas com todas as financas da tabela lixeira
      * </p>
      * @return Uma lista de financas

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeSnap — Beautiful Code Screenshots</title>
+  <meta name="description" content="Create stunning screenshots of your code in seconds. Free, open-source alternative to Carbon.">
+
+  <!-- highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="hljs-theme">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+        <circle cx="12" cy="13" r="3"/>
+      </svg>
+      <span>CodeSnap</span>
+    </div>
+    <div class="header-actions">
+      <a href="https://github.com/Senzo13/codesnap" target="_blank" class="btn btn-ghost">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Controls Panel -->
+    <aside class="controls-panel">
+      <h2 class="panel-title">Customize</h2>
+
+      <div class="control-group">
+        <label class="control-label">Language</label>
+        <select id="language-select" class="control-select">
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="typescript">TypeScript</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="java">Java</option>
+          <option value="cpp">C++</option>
+          <option value="go">Go</option>
+          <option value="rust">Rust</option>
+          <option value="php">PHP</option>
+          <option value="ruby">Ruby</option>
+          <option value="sql">SQL</option>
+          <option value="bash">Bash</option>
+          <option value="json">JSON</option>
+          <option value="yaml">YAML</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Theme</label>
+        <select id="theme-select" class="control-select">
+          <option value="dracula">Dracula</option>
+          <option value="monokai">Monokai</option>
+          <option value="github-dark">GitHub Dark</option>
+          <option value="one-dark" selected>One Dark</option>
+          <option value="nord">Nord</option>
+          <option value="solarized">Solarized</option>
+          <option value="night-owl">Night Owl</option>
+          <option value="tokyo-night">Tokyo Night</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Background</label>
+        <div class="gradient-presets" id="gradient-presets">
+          <button class="gradient-btn active" data-gradient="sunset" title="Sunset" style="background: linear-gradient(135deg, #f97316, #ec4899);"></button>
+          <button class="gradient-btn" data-gradient="ocean" title="Ocean" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></button>
+          <button class="gradient-btn" data-gradient="forest" title="Forest" style="background: linear-gradient(135deg, #22c55e, #14b8a6);"></button>
+          <button class="gradient-btn" data-gradient="midnight" title="Midnight" style="background: linear-gradient(135deg, #1e3a5f, #7c3aed);"></button>
+          <button class="gradient-btn" data-gradient="candy" title="Candy" style="background: linear-gradient(135deg, #ec4899, #3b82f6);"></button>
+          <button class="gradient-btn" data-gradient="custom" title="Custom Color" id="custom-gradient-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </button>
+        </div>
+        <input type="color" id="custom-bg-color" value="#667eea" class="hidden-color-input">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Padding</label>
+        <div class="btn-group" id="padding-group">
+          <button class="btn-option" data-value="16">16px</button>
+          <button class="btn-option" data-value="32">32px</button>
+          <button class="btn-option active" data-value="64">64px</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Border Radius</label>
+        <input type="range" id="border-radius" class="control-range" min="0" max="24" value="12">
+        <span class="range-value" id="border-radius-value">12px</span>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Font Size</label>
+        <input type="range" id="font-size" class="control-range" min="12" max="20" value="14">
+        <span class="range-value" id="font-size-value">14px</span>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Window Controls</label>
+        <div class="btn-group" id="window-controls-group">
+          <button class="btn-option active" data-value="macos">macOS</button>
+          <button class="btn-option" data-value="none">None</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Line Numbers</span>
+          <label class="toggle">
+            <input type="checkbox" id="line-numbers-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Title</label>
+        <input type="text" id="window-title" class="control-input" placeholder="untitled.js" value="">
+      </div>
+
+      <div class="export-actions">
+        <button class="btn btn-primary" id="export-png">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export PNG
+        </button>
+        <button class="btn btn-secondary" id="copy-clipboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Image
+        </button>
+      </div>
+    </aside>
+
+    <!-- Preview Area -->
+    <section class="preview-area">
+      <div class="preview-container">
+        <!-- This is the exportable area -->
+        <div class="code-card" id="code-card">
+          <div class="code-card-bg" id="code-card-bg">
+            <div class="code-window" id="code-window">
+              <div class="window-header" id="window-header">
+                <div class="window-dots" id="window-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <span class="window-title" id="window-title-display"></span>
+              </div>
+              <div class="code-body">
+                <pre><code id="code-output" class="hljs"></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Input -->
+      <div class="input-area">
+        <label class="input-label">Paste your code below</label>
+        <textarea id="code-input" spellcheck="false" placeholder="// Paste your code here...
+function greet(name) {
+  return `Hello, ${name}!`;
+}">function fibonacci(n) {
+  if (n <= 1) return n;
+
+  const memo = new Map();
+
+  function fib(num) {
+    if (num <= 1) return num;
+    if (memo.has(num)) return memo.get(num);
+
+    const result = fib(num - 1) + fib(num - 2);
+    memo.set(num, result);
+    return result;
+  }
+
+  return fib(n);
+}
+
+// Generate first 10 Fibonacci numbers
+const sequence = Array.from({ length: 10 }, (_, i) => fibonacci(i));
+console.log(sequence); // [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</textarea>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/export.js"></script>
+</body>
+</html>

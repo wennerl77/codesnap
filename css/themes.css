@@ -1,0 +1,71 @@
+/* ============================================
+   CodeSnap — Code Editor Themes
+   ============================================
+   Each theme defines the code window background
+   and text colors. Syntax highlighting colors
+   are handled by highlight.js CDN stylesheets.
+   ============================================ */
+
+/* Dracula */
+.theme-dracula .code-window {
+  background: #282a36;
+}
+.theme-dracula .window-header {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Monokai */
+.theme-monokai .code-window {
+  background: #272822;
+}
+.theme-monokai .window-header {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* GitHub Dark */
+.theme-github-dark .code-window {
+  background: #0d1117;
+}
+.theme-github-dark .window-header {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* One Dark */
+.theme-one-dark .code-window {
+  background: #282c34;
+}
+.theme-one-dark .window-header {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Nord */
+.theme-nord .code-window {
+  background: #2e3440;
+}
+.theme-nord .window-header {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Solarized */
+.theme-solarized .code-window {
+  background: #002b36;
+}
+.theme-solarized .window-header {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Night Owl */
+.theme-night-owl .code-window {
+  background: #011627;
+}
+.theme-night-owl .window-header {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Tokyo Night */
+.theme-tokyo-night .code-window {
+  background: #1a1b26;
+}
+.theme-tokyo-night .window-header {
+  background: rgba(255, 255, 255, 0.04);
+}

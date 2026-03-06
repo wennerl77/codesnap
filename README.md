@@ -10,6 +10,10 @@
 
 No sign-up. No backend. No build step. Just open and go.
 
+<p align="center">
+  <img src="codesnap.png" alt="CodeSnap Preview" width="90%" />
+</p>
+
 ---
 
 ## ✨ Features

